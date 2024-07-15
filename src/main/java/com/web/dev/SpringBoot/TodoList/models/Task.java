@@ -5,29 +5,29 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+//@Getter
+//@Setter
+//@RequiredArgsConstructor
 @Entity
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String task;
-    private LocalDateTime deadLine;
+    private LocalDate deadLine;
     private boolean completed;
 
-    public Task(String task, LocalDateTime deadLine, boolean completed) {
+    public Task() {
+    }
+
+    public Task(Long id, String task, LocalDate deadLine, boolean completed) {
+        this.id = id;
         this.task = task;
         this.deadLine = deadLine;
         this.completed = completed;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getTask() {
@@ -38,19 +38,19 @@ public class Task {
         this.task = task;
     }
 
+    public LocalDate getDeadLine() {
+        return deadLine;
+    }
+
+    public void setDeadLine(LocalDate deadLine) {
+        this.deadLine = deadLine;
+    }
+
     public boolean isCompleted() {
         return completed;
     }
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
-    }
-
-    public LocalDateTime getDeadLine() {
-        return deadLine;
-    }
-
-    public void setDeadLine(LocalDateTime deadLine) {
-        this.deadLine = deadLine;
     }
 }

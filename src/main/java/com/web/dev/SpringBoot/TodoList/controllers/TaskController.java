@@ -1,12 +1,14 @@
 package com.web.dev.SpringBoot.TodoList.controllers;
 
 import com.web.dev.SpringBoot.TodoList.models.Task;
+import com.web.dev.SpringBoot.TodoList.models.TaskDto;
 import com.web.dev.SpringBoot.TodoList.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -15,40 +17,40 @@ import java.util.Optional;
 @RequestMapping("/api/v1/tasks")
 public class TaskController {
     private final TaskService taskService;
-
-    @Autowired
     public TaskController(TaskService taskService) {
         this.taskService = taskService;
     }
-
+    @PostMapping("/create")
+    public ResponseEntity<String> createNewTask(@RequestBody TaskDto task){
+        return taskService.createNewTask(task);
+    }
     @GetMapping("")
-    public ResponseEntity<List<Task>> getAllTasks() {
-        return ResponseEntity.ok(taskService.getAllTasks());
+    public ResponseEntity<List<TaskDto>> getAllTasks() {
+        return taskService.getAllTasks();
+    }
+    @GetMapping("find/{id}")
+    public ResponseEntity<TaskDto> getTask(@PathVariable Long id) {
+        return taskService.findTaskById(id);
     }
     @GetMapping("/completed")
-    public ResponseEntity<List<Task>> getCompletedTasks(){
-        return ResponseEntity.ok(taskService.findAllCompletedTasks());
+    public ResponseEntity<List<TaskDto>> getCompletedTasks(){
+        return taskService.findAllCompletedTasks();
     }
     @GetMapping("/incomplete")
-    public ResponseEntity<List<Task>> getInCompleteTasks(){
-        return ResponseEntity.ok(taskService.findAllInCompletedTasks());
+    public ResponseEntity<List<TaskDto>> getInCompleteTasks(){
+        return taskService.findAllInCompletedTasks();
     }
-    @PostMapping("/")
-    public ResponseEntity<Task> createNewTask(@RequestBody Task task){
-        return ResponseEntity.ok(taskService.createNewTask(task));
+
+    @GetMapping("/deadline/{date}")
+    public ResponseEntity<TaskDto> getTaskByDeadline(@PathVariable("date") LocalDate date){
+        return taskService.findByDeadLine(date);
     }
-    @GetMapping("/deadline")
-    public ResponseEntity<Optional<Task>> getTaskByDeadline(@PathVariable LocalDateTime time){
-        return ResponseEntity.ok(taskService.findByDeadLine(time));
+    @PutMapping("/update/{id}")
+    public ResponseEntity<String> updateTask(@PathVariable Long id, @RequestBody TaskDto taskDto){
+         return taskService.updateTask(id,taskDto);
     }
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PutMapping("/{id}")
-    public void updateTask(@RequestBody Task task, @PathVariable Long id){
-         taskService.updateTask(task,id);
-    }
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> deleteTask(@PathVariable Long id) {
-        taskService.deleteTaskById(id);
-        return ResponseEntity.ok(true);
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<String> deleteTask(@PathVariable Long id) {
+        return taskService.deleteTaskById(id);
     }
 }
