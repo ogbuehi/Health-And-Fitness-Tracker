@@ -2,7 +2,6 @@ package com.learnjava.HealthAndFitnessTracker.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.List;
@@ -15,7 +14,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private int userId;
+    private Integer userId;
     @NotEmpty
     private String name;
     @NotEmpty(message = "Gender cannot be empty")
